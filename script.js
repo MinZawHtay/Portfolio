@@ -92,30 +92,32 @@ function checkInputs() {
 }
 
 function sendEmail() {
-    const bodyMessage = `
-        Full Name: ${fullName.value}<br>
-        Email: ${email.value}<br>
-        Phone Number: ${phone.value}<br>
-        Message: ${mess.value}
-    `;
+    const templateParams = {
+        subject: subject.value,
+        full_name: fullName.value,
+        email: email.value,
+        phone: phone.value,
+        message: mess.value
+    };
     
-    Email.send({
-        SecureToken: "7f57368f-9cb8-4550-acf6-8b04f8c65fb3",
-        To: 'minzawhtaymzh679@gmail.com',
-        From: "minzawhtaymzh679@gmail.com",
-        Subject: subject.value,
-        Body: bodyMessage
-    }).then(message => {
-        if (message === "OK") {
+    emailjs.send('service_igcryoe', 'template_ifvgx99', templateParams)
+        .then(response => {
             Swal.fire({
                 title: "Success",
                 text: "Message sent successfully!",
                 icon: "success"
             });
             form.reset();
-        }
-    });
+        })
+        .catch(error => {
+            Swal.fire({
+                title: "Error",
+                text: "Failed to send message: " + error.text,
+                icon: "error"
+            });
+        });
 }
+
 
 form.addEventListener("submit", e => {
     e.preventDefault();
